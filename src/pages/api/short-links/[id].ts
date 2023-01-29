@@ -5,11 +5,9 @@ export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const slugID = req.query.id as string;
-
   switch (req.method) {
     case "GET":
-      return getShortLinkByID(slugID, res);
+      return getShortLinkByID(req, res);
 
     default:
       return res.status(404).json({
@@ -19,7 +17,8 @@ export default async function handle(
   }
 }
 
-async function getShortLinkByID(slug: string, res: NextApiResponse) {
+async function getShortLinkByID(req: NextApiRequest, res: NextApiResponse) {
+  const slug = req.query.id as string;
   const result = await prismaClient.shortLinks.findUnique({
     where: {
       slug,
@@ -32,7 +31,6 @@ async function getShortLinkByID(slug: string, res: NextApiResponse) {
   if (result) {
     return res.json(result);
   }
-
   return res
     .status(404)
     .send({ error: `Couldn't find '${slug}', which was requested` });
