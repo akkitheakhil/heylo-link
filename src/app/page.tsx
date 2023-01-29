@@ -1,91 +1,134 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+"use client";
 
-const inter = Inter({ subsets: ['latin'] })
+import styles from "./page.module.scss";
+import useSWRMutation from "swr/mutation";
+import { API_ROUTE_CONSTANTS } from "../constants/api-routes.contants";
+import { fetcherPOST } from "../libs/fetcher";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
+import { urlValidation } from "@/libs/validations";
+import { addHttpPrefix } from "@/libs/utils/common-utils";
+import {
+  HeyloLogo,
+  HeyloHref,
+  HeyloInput,
+  HeyloButton,
+  HeyloLoader,
+  HeyloSnackbar,
+} from "@/components";
+import { inria_sans } from "@/libs/fonts";
 
 export default function Home() {
+  const router = useRouter();
+  const urlLink = useRef<HTMLInputElement>();
+  const [hasCopied, setCopied] = useState(false);
+  const [validationErrors, setValidationErrors] = useState(false);
+
+  const {
+    data,
+    error,
+    trigger,
+    isMutating: isLoading,
+  } = useSWRMutation(
+    () =>
+      urlLink?.current?.value ? API_ROUTE_CONSTANTS.CREATE_SHORT_LINK : null,
+    fetcherPOST
+  );
+
+  const handleCreateLink = () => {
+    try {
+      const inputVal = addHttpPrefix(urlLink?.current?.value ?? "");
+      urlValidation.parse(inputVal);
+      trigger({ url:  inputVal});
+      setValidationErrors(false);
+    } catch (err) {
+      setValidationErrors(true);
+    }
+  };
+
+  const handleCopyText = () => {
+    if (data?.slug) {
+      setCopied(true);
+      const url = `${process.env.NEXT_PUBLIC_APP_HOST_URL}${data.slug}`;
+      void navigator.clipboard.writeText(url);
+    }
+  };
+
+  const handleJoin = () => {
+    void router.push("/register");
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <>
+      <main className={styles["container"]}>
+        <div className={styles["header"]}>
+          <HeyloLogo text="Heylo Link" />
+          <HeyloHref
+            fontSize="24px"
+            href="/register"
+            text="Register"
+            target={"_self"}
+          />
+        </div>
+        <div className={styles["main-content"]}>
+          <h1 className={[styles["title"], inria_sans.className].join(" ")}>
+            {" "}
+            Short URLs and Landing pages{" "}
+          </h1>
+          <div className={styles["form-container"]}>
+            <HeyloInput
+              input={{
+                placeholder: "URL to short | e.g: https://heylo.link",
+                ref: urlLink,
+              }}
+            ></HeyloInput>
+
+            <HeyloButton
+              onClick={handleCreateLink}
+              color="PRIMARY"
+              label="GENERATE"
+              height={"60px"}
             />
-          </a>
-        </div>
-      </div>
+          </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
+          {isLoading && (
+            <div className={styles["loading-indicator"]}>
+              <HeyloLoader />
+            </div>
+          )}
 
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
+          {data?.slug && !isLoading && (
+            <div className={styles["terminal"]} onClick={handleCopyText}>
+              <pre>{`${process.env.NEXT_PUBLIC_APP_HOST_URL}${data.slug}`}</pre>
+            </div>
+          )}
+
+          {(error || validationErrors) && !isLoading && (
+            <div className={styles["terminal"]}>
+              <pre> Please enter a valid URL </pre>
+            </div>
+          )}
+
+          <p className={[styles["sub-title"], inria_sans.className].join(" ")}>
+            Want to create custom short URLs and personal landing page?
           </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+          <div className={styles["action"]}>
+            <HeyloButton
+              width="248px"
+              color="SECONDARY"
+              label="Join now"
+              height={"60px"}
+              onClick={handleJoin}
+            />
+          </div>
+        </div>
+      </main>
+      <HeyloSnackbar
+        duration={5000}
+        message="Short URL copied to clipboard!"
+        isOpen={hasCopied}
+        onClose={() => setCopied(false)}
+      />
+    </>
+  );
 }

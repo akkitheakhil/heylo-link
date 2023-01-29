@@ -1,0 +1,67 @@
+@mixin media($width: 600px) {
+  @media only screen and (max-width: $width) {
+    @content;
+  }
+}
+
+// Mobile specific
+@mixin mobile() {
+  @media only screen and (min-width: 540px) {
+    @content;
+  }
+}
+
+// Tab specific
+@mixin tab() {
+  @media only screen and (min-width: 740px) {
+    @content;
+  }
+}
+
+// Laptop specific
+@mixin laptop() {
+  @media only screen and (min-width: 960px) {
+    @content;
+  }
+}
+
+// Desktop specific
+@mixin desktop() {
+  @media only screen and (min-width: 1028px) {
+    @content;
+  }
+}
+
+// Mac Pro Retina Display
+@mixin retina() {
+  @media only screen and (min-width: 1228px) {
+    @content;
+  }
+}
+
+$padding-extra-small: 2px;
+$padding-small: 4px;
+$padding: 8px;
+$padding-medium: 16px;
+$padding-large: 24px;
+$padding-xl: 48px;
+$padding-2xl: 64px;
+$padding-3xl: 96px;
+
+$margin: 8px;
+$margin-medium: 16px;
+$margin-large: 24px;
+$margin-xl: 48px;
+$margin-2xl: 64px;
+
+$min-width: 340px;
+
+$border-radius: 8px;
+$border-radius-medium: 16px;
+$border-radius-large: 24px;
+
+$border: 2px;
+$border-medium: 4px;
+$border-large: 8px;
+
+$transition: all 300ms ease-in-out;

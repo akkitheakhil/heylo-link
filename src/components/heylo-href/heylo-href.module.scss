@@ -1,0 +1,26 @@
+.heylo-href {
+  cursor: pointer;
+  position: relative;
+  color: #000;
+  text-decoration: none;
+  font-family: var(--primary-font);
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 3px;
+    bottom: -2px;
+    left: 0;
+    background-color: #000;
+    transition: width 0.3s;
+  }
+
+  &:hover::before {
+    width: 100%;
+  }
+
+  &:hover:active {
+    opacity: 0.7;
+  }
+}

@@ -1,0 +1,130 @@
+@import '../styles/utils.scss';
+
+.container {
+  padding: 0px $padding-medium;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 2rem;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 300;
+  margin-bottom: 1em;
+}
+
+.sub-title {
+  font-size: 32px;
+  font-weight: 300;
+  margin-top: 1em;
+  align-items: center;
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.main-content {
+  margin-top: 15%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.action {
+  margin-top: 1.5em;
+  align-self: center;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  gap: $padding-medium;
+  flex-direction: column;
+}
+
+.loading-indicator {
+  margin-top: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.terminal {
+  align-self: center;
+  margin-top: 2rem;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 6px;
+  padding-top: $padding-xl;
+  overflow: hidden;
+  background-color: white;
+  cursor: pointer;
+  border: 4px solid black;
+  font-family: var(--secondary-font) !important;
+  pre {
+    font-family: var(--secondary-font) !important;
+    color: black;
+    padding: 0 1rem 1rem;
+    margin: 0;
+  }
+
+  &::before {
+    display: flex;
+    content: "\2022  \2022  \2022";
+    position: absolute;
+    top: 0;
+    left: 0 !important;
+    height: 4px;
+    background: rgb(58, 58, 58);
+    border-bottom: 4px solid black;
+    color: white;
+    width: 100%;
+    font-size: 2rem;
+    line-height: 0;
+    padding: $padding-medium 0;
+    text-indent: 4px;
+  }
+
+}
+
+@include laptop() {
+  .container {
+    padding: 0px $padding-xl;
+  }
+
+  .title {
+    width: 90%;
+    align-self: center;
+  }
+
+  .form-container {
+    flex-direction: row;
+    width: 90%;
+    align-self: center;
+    button {
+      width: 360px;
+    }
+  }
+}
+
+@include desktop() {
+  .form-container,
+  .title {
+    width: 80%;
+  }
+}
+
+@include retina() {
+  .form-container,
+  .title {
+    width: 60%;
+  }
+}

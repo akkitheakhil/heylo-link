@@ -1,0 +1,41 @@
+
+@import './utils.scss';
+
+:root {
+    --light-background: #f2f2f2;
+    --primary-color: #2ce69b;
+    --secondary-color: #8692fe;
+    --secondary-font: 'Inria Sans', sans-serif;
+  }
+
+  *,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100vh;
+  min-width: $min-width;
+  -webkit-touch-callout: none; /* Safari */
+  -webkit-user-select: none; /* Chrome */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Bebas Neue', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  background-color: var(--light-background);
+  overflow-x: hidden;
+}
